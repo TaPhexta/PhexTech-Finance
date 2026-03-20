@@ -1,5 +1,5 @@
 import maskpass
-from account import register_user, load_data, load_data, save_data, hash_pin
+from account import authenticate_user, register_user, load_data, load_data, save_data, hash_pin
 
 def clear_screen():
     """Keep the console screen clean."""
@@ -73,6 +73,62 @@ def login():
     else:
         print("\nInvalid username or PIN.")
         return None
+    
+def dashboard(user_session):
+    """The 'Logged In' experience."""
+    username = user_session['username']
+    
+    while True:
+        # Reload data to ensure balance/history is always current
+        data = load_data()
+        current_user = data[username]
+        
+        print("\n================================")
+        print(f"       PHEXTECH DASHBOARD       ")
+        print(f"  Welcome, {current_user['first_name']} {current_user['last_name']}")
+        print(f"  Cheque Account Balance: R{current_user['balance']}")
+        print("================================")
+        print("1. Deposit")
+        print("2. Withdraw")
+        print("3. View Account & History")
+        print("4. Profile Details")
+        print("5. Logout")
+        
+        choice = input("\nSelect an option: ")
+        
+        if choice == "1":
+            print("\n[Deposit Feature Coming Soon]") 
+        elif choice == "2":
+            print("\n[Withdraw Feature Coming Soon]")
+        elif choice == "3":
+            print(f"\n--- Transaction History ---")
+            for record in current_user.get('history', []):
+                print(f" > {record}")
+        elif choice == "4":
+            print(f"\n--- Profile Info ---")
+            print(f"Email: {current_user['email']}")
+            print(f"Phone: {current_user['phone']}")
+            print(f"ID No: {current_user['id_no']}")
+        elif choice == "5":
+            print(f"Logging out {username}... See you soon!")
+            break
+        else:
+            print("Invalid choice.")
+            
+def login_flow():
+    """
+    Handles the login attempt and starts the session if successful.
+    """
+    print("\n--- LOGIN TO YOUR ACCOUNT ---")
+    username = input("Username: ").lower().strip()
+    pin = maskpass.askpass("PIN: ", mask="*")
+    
+    user_data = authenticate_user(username, pin)
+    
+    if user_data:
+        dashboard(user_data)
+    else:
+        print("\nAccess Denied: Incorrect username or PIN.")
 
 def main_menu():
     while True:
@@ -84,15 +140,6 @@ def main_menu():
         choice = input("\nSelect an option: ")
         
         if choice == '1':
-            username = input("Choose a username:  ")
-            
-            # security first: 6 digit pin with masking
-            pin = maskpass.askpass("Choose a 5-digit PIN: ", mask="*")
-            
-            if not pin.isdigit() or len(pin) != 5:
-                print("PIN must be exactly 5 digits.")
-                continue
-            
             user_details = get_registration_input()
             success, message = register_user(user_details)
             print(message)

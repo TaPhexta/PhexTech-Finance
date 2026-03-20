@@ -56,4 +56,19 @@ def register_user(user_details):
     # Write the updated dictionary back to the JSON file
     save_data(data)
     
-    return True, f"Congratulations {user_details['first_name']}, and Welcome to PhexTech-Finance! Your account has been created successfully."
+    msg = f"Congratulations {user_details['first_name']}, your account was created successfully!"
+    return True, msg
+    
+def authenticate_user(username, entered_pin):
+    """
+    Checks if the provided username and PIN are valid for login.
+    Returns user data if valid, else nothing otherwise. 
+    """
+    data = load_data()
+    username = username.lower().strip()
+    
+    if username in data:
+        # Hash the provided PIN and compare with stored hash
+        if data[username]['pin'] == hash_pin(entered_pin):
+            return data[username]
+    return None
