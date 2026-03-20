@@ -3,5 +3,19 @@
         "pin": "12345",
         "balance": "0.01",
         "history": []
+    },
+    "yandasman": {
+        "username": "yandasman",
+        "first_name": "Oyama",
+        "last_name": "Mbatani",
+        "email": "oysmbatani@gmail.com",
+        "phone": "0812602573",
+        "id_no": "000000000000",
+        "address": "Home",
+        "pin": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
+        "balance": "1.1e+20",
+        "history": [
+            "Initial Deposit: R1.1e+20"
+        ]
     }
 }

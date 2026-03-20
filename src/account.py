@@ -1,5 +1,6 @@
 import json
 import os
+import hashlib
 from decimal import Decimal
 
 # path logic for finance.json
@@ -7,7 +8,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_DIR = os.path.join(BASE_DIR, 'data')
 DATA_FILE = os.path.join(DATA_DIR, 'finance.json')
 
-STARTING_BALANCE = Decimal('0.01')
+def hash_pin(pin):
+    """Hashes the PIN using SHA-256 for secure storage."""
+    return hashlib.sha256(pin.encode()).hexdigest()
 
 def load_data():
     """Fetches the data from the finance.json file."""
@@ -25,22 +28,32 @@ def save_data(data):
     with open(DATA_FILE, 'w') as f:
         json.dump(data, f, indent=4)
         
-def register_user(username, pin):
-    """Registers a new user with the given username and pin."""
-    
-    # returns true or false with message depending on user existence
+def register_user(user_details):
+    """
+    Registers a new user using the user_details dictionary.
+    Checks for existence, hashes the PIN, and saves to the JSON database.
+    """
+    # Load current database
     data = load_data()
     
+    # Extract username from the passed dictionary
+    username = user_details['username']
+    
+    # Check if the account already exists
     if username in data:
-        return False, "Username already exists."
+        return False, "Error: Username already exists."
     
-    # Store Decimal as a string in JSON to prevent precision issues with rounding
-    data[username] = {
-        'pin': pin,
-        'balance': str(STARTING_BALANCE),
-        'history': []
-    }
+    # Hash the PIN inside the dictionary for security
+    # This ensures '123456' becomes a non-reversible hash string
+    user_details['pin'] = hash_pin(user_details['pin'])
     
+    # Initialize the transaction history with the mandatory R10+ deposit
+    user_details['history'] = [f"Initial Deposit: R{user_details['balance']}"]
+    
+    # Add this user's dictionary to our main data object
+    data[username] = user_details
+    
+    # Write the updated dictionary back to the JSON file
     save_data(data)
-    return True, "User registered successfully."
-
+    
+    return True, f"Congratulations {user_details['first_name']}, and Welcome to PhexTech-Finance! Your account has been created successfully."
