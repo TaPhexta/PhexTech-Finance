@@ -100,3 +100,20 @@ def show_history(user):
         for record in history:
             print(f" > {record}")
     print("-" * 40)
+    
+def get_transfer_input():
+    """
+    Asks user for transfer details: recipient username and amount.
+    """
+    print("\n--- New Transfer ---")
+    recipient_acc_no = input("Enter Recipient Account Number: ").strip()
+    
+    # Amount input with validation
+    while True:
+        try:
+            amount = float(input("Enter Amount to Transfer: R"))
+            if amount > 0:
+                return recipient_acc_no, str(amount)  # Return as string for transactions module
+            print("Error: Amount must be greater than zero.")
+        except ValueError:
+            print("Invalid input. Please enter a number (e.g. R150.75).")

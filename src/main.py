@@ -1,7 +1,7 @@
 import maskpass
 from auth import register_user, authenticate_user
 from database import load_data
-from transactions import deposit_funds, withdraw_funds
+from transactions import deposit_funds, transfer_funds, withdraw_funds
 from utilities import clear_screen
 import views
     
@@ -23,7 +23,8 @@ def dashboard(user_session):
         print("2. Withdraw")
         print("3. View Account & History")
         print("4. Profile Details")
-        print("5. Logout")
+        print("5. Transfer")
+        print("6. Logout")
         
         choice = input("\nSelect an option: ")
         
@@ -60,8 +61,22 @@ def dashboard(user_session):
         elif choice == "4":
                 views.show_profile(current_user)
                 
-        # LOGOUT
+        # TRANSFER TO ANOTHER USER
         elif choice == "5":
+            # 1. Get Inputs
+            target_acc, amount_to_send = views.get_transfer_input()
+            
+            # 2. Process
+            success, message = transfer_funds(username, target_acc, amount_to_send)
+            
+            # 3. Result
+            if success:
+                print(f"\n[SUCCESS]: {message}")
+            else:
+                print(f"\n[ERROR]: {message}")
+                
+        # LOGOUT
+        elif choice == "6":
             print(f"Logging out {username}... See you soon!")
             break
         else:

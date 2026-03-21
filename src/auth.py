@@ -1,4 +1,5 @@
 import hashlib
+import random
 from database import load_data, save_data  
 
 def hash_pin(pin):
@@ -27,6 +28,9 @@ def register_user(user_details):
     # Initialize the transaction history with the mandatory R10+ deposit
     user_details['history'] = [f"Initial Deposit: R{user_details['balance']}"]
     
+    # Generate a unique account number
+    user_details['account_no'] = generate_account_number()
+    
     # Add this user's dictionary to our main data object
     data[username] = user_details
     
@@ -35,6 +39,18 @@ def register_user(user_details):
     
     msg = f"Congratulations {user_details['first_name']}, your account was created successfully!"
     return True, msg
+
+def generate_account_number():
+    """Generates a unique 10-digit account number."""
+    data = load_data()
+    # Create a set of all existing account numbers for quick lookup
+    existing_numbers = {details.get('account_no') for details in data.values()}
+    
+    while True:
+        # Generate a random 10-digit number as a string
+        new_no = str(random.randint(1000000000, 9999999999))
+        if new_no not in existing_numbers:
+            return new_no
 
 def authenticate_user(username, entered_pin):
     """
