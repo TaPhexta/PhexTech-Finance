@@ -13,9 +13,13 @@
         "id_no": "000000000000",
         "address": "Home",
         "pin": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
-        "balance": "1.1e+20",
+        "balance": "17350.0",
         "history": [
-            "Initial Deposit: R1.1e+20"
+            "Initial Deposit: R1.1e+20",
+            "2026-03-21 13:48 | Deposit: R15050.0 | New Balance: R15150.0",
+            "2026-03-21 13:49 | Deposit: R200.0 | New Balance: R15350.0",
+            "2026-03-21 13:49 | Deposit: R7000.0 | New Balance: R22350.0",
+            "2026-03-21 14:08 | Withdraw: R5000.0 | New Balance: R17350.0"
         ]
     }
 }

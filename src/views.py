@@ -63,4 +63,40 @@ def show_profile(user):
     print(f"Phone:     {user['phone']}")
     print(f"Address:   {user['address']}")
     
+def get_deposit_amount():
+    """
+    Asks user how much they want to deposit.
+    """
+    while True:
+        try:
+            amount = float(input("\nEnter amount to deposit: R"))
+            if amount > 0:          # validation
+                return str(amount)  # Return as string for transactions module
+            print("Error: Amount must be greater than zero.")
+        except ValueError:
+            print("Invalid input. Please enter a number (e.g. R150.75).")
+            
+def get_withdrawal_amount():
+    """
+    Asks user how much they want to withdraw.
+    """
+    while True:
+        try:
+            amount = float(input("\nEnter amount to withdraw: R"))
+            if amount > 0:          # validation
+                return str(amount)  # Return as string for transactions module
+            print("Error: Amount must be greater than zero.")
+        except ValueError:
+            print("Invalid input. Please enter a number (e.g. R150.75).")
+            
+def show_history(user):
+    """Displays the user's transaction history."""
+    print(f"\n--- Transaction History For {user['username'].upper()} ---")
+    history = user.get('history', [])
     
+    if not history:
+        print(" > No transactions found.")
+    else:
+        for record in history:
+            print(f" > {record}")
+    print("-" * 40)

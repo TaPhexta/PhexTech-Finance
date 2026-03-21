@@ -1,6 +1,7 @@
 import maskpass
 from auth import register_user, authenticate_user
 from database import load_data
+from transactions import deposit_funds, withdraw_funds
 from utilities import clear_screen
 import views
     
@@ -26,16 +27,40 @@ def dashboard(user_session):
         
         choice = input("\nSelect an option: ")
         
-        if choice == "1":
-            print("\n[Deposit Feature Coming Soon]") 
+        # DEPOSIT
+        if choice == "1": 
+            # 1. Ask for the amount (views)
+            amount_to_add = views.get_deposit_amount()
+            
+            # 2. Process the transaction
+            success, message = deposit_funds(username, amount_to_add) 
+            
+            # 3. Show the result
+            print(f"\n[SYSTEM]: {message}")
+            
+        # WITHDRAW
         elif choice == "2":
-            print("\n[Withdraw Feature Coming Soon]")
+            # 1. Ask for the amount (views)
+            amount_to_remove = views.get_withdrawal_amount()
+            
+            # 2. Process the transaction
+            success, message = withdraw_funds(username, amount_to_remove)
+            
+            # 3. Show the result
+            if success:
+                print(f"\n[SYSTEM]: {message}")
+            else:
+                print(f"\n[SYSTEM]: {message}")
+                
+        # HISTORY & ACCOUNT DETAILS
         elif choice == "3":
-            print(f"\n--- Transaction History ---")
-            for record in current_user.get('history', []):
-                print(f" > {record}")
+            views.show_history(current_user)
+                
+        # PROFILE DETAILS
         elif choice == "4":
                 views.show_profile(current_user)
+                
+        # LOGOUT
         elif choice == "5":
             print(f"Logging out {username}... See you soon!")
             break
